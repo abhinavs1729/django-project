@@ -22,6 +22,6 @@ urlpatterns = [
     path("",views.signup,name='home'),
     path("login",views.loginuser,name='login'),
     path("signup",views.signup,name='signup'),
-    path("blog",views.blog,name='blog'),
+    path("blogs",views.blog,name='blog'),
     path("create_blog",views.create_blog,name='create_blog')
 ]

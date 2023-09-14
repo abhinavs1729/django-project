@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from home.models import login,blogss
 from datetime import datetime
+v = 0
 # Create your views here.
 def index(request):
     return render(request,'index.html')
@@ -14,6 +15,7 @@ def about(request):
 def signup(request):
     user_name = "sn"
     pass_word = "io"
+    v = 0
     if request.method == "POST":
         user_name = request.POST.get('username');
         pass_word = request.POST.get('password');
@@ -30,22 +32,30 @@ def loginuser(request):
         user = authenticate(username=user_name, password=pass_word)
         if user is not None:
             login(request,user)
-            return redirect("/")
+            v = 1
+            return render(request,"blogs.html")
         else:
+            v = 0
             return render(request,"login.html")
 
 
     return render(request,"login.html")
 
 def blog(request):
-    blog_list = blogss.objects.all();
-    return render(request,"blogs.html",{'blog_list':blog_list});
+    if v==1:
+        blog_list = blogss.objects.all();
+        return render(request,"blogs.html",{'blog_list':blog_list});
+    else:
+        return render(request,"login.html")
 
 def create_blog(request):
-    if request.method == "POST":
-        title1 = request.POST.get('username');
-        post1 = request.POST.get('subject');
-        new_post = blogss(Title = title1 , Content =post1)
-        new_post.save();
-        print(post1,title1)
-    return render(request, "create_blog.html")
+    if v == 1:
+        if request.method == "POST":
+            title1 = request.POST.get('username');
+            post1 = request.POST.get('subject');
+            new_post = blogss(Title = title1 , Content =post1)
+            new_post.save();
+            print(post1,title1)
+        return render(request, "create_blog.html")
+    else:
+        return render(request,"login.html")
